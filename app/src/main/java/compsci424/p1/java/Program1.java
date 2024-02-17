@@ -9,6 +9,11 @@
  */
 package compsci424.p1.java;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Scanner;
+
+
 /**
  * Main class for this program. The required steps have been copied
  * into the main method as comments. Feel free to add more comments to
@@ -22,7 +27,51 @@ public class Program1 {
      * @param args command-line arguments, which can be ignored
      */
     public static void main(String[] args) {
-
+    	Scanner scanner = new Scanner(System.in);
+    	String command;
+    	Version1 version1 = new Version1();
+    	Version2 version2 = new Version2();
+    	
+    	System.out.println("Enter commands (create N, destroy N, or end): ");
+    	
+    	while(true) {
+    		command = scanner.nextLine().trim();
+    		
+    		if(command.equalsIgnoreCase("end") || (!command.startsWith("create") && !command.startsWith("destroy"))) {
+    			break;
+    		}
+    		String[] parts = command.split(" ");
+    		String action = parts[0];
+    		int pid = Integer.parseInt(parts[1]);
+    		
+    		if(action.equalsIgnoreCase("create")) {
+    			version1.create(pid);
+    			version2.create(pid);
+    		}
+    		else if(action.equalsIgnoreCase("destroy")) {
+    			version1.destroy(pid);
+    			version2.destroy(pid);
+    		}
+    	}
+    	
+    	
+    	
+    	long startTimeV1 = System.currentTimeMillis();
+    	for(int i = 0; i < 200; i++) {
+    		version1.create(i);
+    		version1.destroy(i);
+    	}
+    	long endTimeV1 = System.currentTimeMillis();
+    	System.out.println("Version 1 running time: " + (endTimeV1 - startTimeV1) + " milliseconds");
+    	
+    	long startTimeV2 = System.currentTimeMillis();
+    	for(int i = 0; i < 200; i++) {
+    		version2.create(i);
+    		version2.destroy(i);
+    	}
+    	long endTimeV2 = System.currentTimeMillis();
+    	System.out.println("Version 2 running time: " + (endTimeV2 - startTimeV2) + "milliseconds");
+    	
         // 1. Ask the user to enter commands of the form "create N",
         //    "destroy N", or "end", where N is an integer between 0 
         //    and 15.
@@ -56,8 +105,6 @@ public class Program1 {
 
         // 8. Repeat step 7, but with the Version 2 object.
 
-        // This line is here just to test the Gradle build procedure.
-        // You can delete it.
-        System.out.println("Builds without errors and runs to completion.");
+        
     }
 }

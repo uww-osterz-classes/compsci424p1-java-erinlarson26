@@ -15,14 +15,15 @@ package compsci424.p1.java;
  */
 public class Version1 {
     // Declare any class/instance variables that you need here.
-
+	private Version1PCB[] pcbArray;
     /**
      * Default constructor. Use this to allocate (if needed) and
      * initialize the PCB array, create the PCB for process 0, and do
      * any other initialization that is needed. 
      */
     public Version1() {
-
+    	pcbArray = new Version1PCB[16];
+    	pcbArray[0] = new Version1PCB(0);
     }
 
     /**
@@ -31,6 +32,22 @@ public class Version1 {
      * @return 0 if successful, not 0 if unsuccessful
      */
     int create(int parentPid) {
+    	if(parentPid < 0 || parentPid >= pcbArray.length || pcbArray[parentPid] == null) {
+    		System.out.println("Error: Parent process does not exist.");
+    		return 1;
+    	}
+    	
+    	int childPid = freePid();
+    	if(childPid == -1) {
+    		System.out.println("Error: No free PIDs available for new processes.");
+    		return 2;
+    	}
+    	
+    	Version1PCB childPCB = new Version1PCB(childPid);
+    	pcbArray[childPid] = childPCB;
+    	
+    	pcbArray[parentPid].addChild(childPCB);
+    	
         // If parentPid is not in the process hierarchy, do nothing; 
         // your code may return an error code or message in this case,
         // but it should not halt
@@ -54,6 +71,16 @@ public class Version1 {
      * @return 0 if successful, not 0 if unsuccessful
      */
     int destroy (int targetPid) {
+    	if(targetPid < 0 || targetPid >= pcbArray.length || pcbArray[targetPid] == null ) {
+    		System.out.println("Error: Target process does not exist.");
+    		return 1;
+    	}
+    	
+    	destroyDescendants(targetPid);
+    	
+    	pcbArray[targetPid].getParent().removeChild(targetPid);
+    	
+    	pcbArray[targetPid] = null;
          // If targetPid is not in the process hierarchy, do nothing; 
          // your code may return an error code or message in this case,
          // but it should not halt
@@ -72,7 +99,13 @@ public class Version1 {
          // If you change the return type/value(s), update the Javadoc.
         return 0; // often means "success" or "terminated normally"
     }
-
+    
+    private void destroyDescendants(int targetPid) {
+    	for(Version1PCB child : pcbArray[targetPid].getChildren()) {
+    		destroyDescendants(child.getPid());
+    		pcbArray[child.getPid()] = null;
+    	}
+    }
     /**
      * Traverse the process creation hierarchy graph, printing
      * information about each process as you go. See Canvas for the
@@ -84,7 +117,28 @@ public class Version1 {
      * the main program for printing. It's your choice. 
      */
     void showProcessInfo() {
-
+    	showProcessInfoRecursive(pcbArray[0], 0);
+    }
+    
+    private void showProcessInfoRecursive(Version1PCB pcb, int indentLevel) {
+    	if(pcb != null) {
+    		for(int i = 0; i < indentLevel; i++) {
+    			System.out.print(" ");
+    		}
+    		System.out.println(pcb);
+    		for(Version1PCB child : pcb.getChildren()) {
+    			showProcessInfoRecursive(child, indentLevel + 1);
+    		}
+    	}
+    }
+    
+    private int freePid() {
+    	for(int i = 1; i < pcbArray.length; i++) {
+    		if(pcbArray[i] == null) {
+    			return i;
+    		}
+    	}
+    	return -1;
     }
 
     /* If you need or want more methods, feel free to add them. */
