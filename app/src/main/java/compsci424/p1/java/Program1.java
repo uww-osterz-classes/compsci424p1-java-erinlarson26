@@ -22,7 +22,6 @@ import java.util.Scanner;
  */
 public class Program1 {
     // Declare any class/instance variables that you need here.
-
     /**
      * @param args command-line arguments, which can be ignored
      */
@@ -104,7 +103,5 @@ public class Program1 {
         //     the Version 1 running time.
 
         // 8. Repeat step 7, but with the Version 2 object.
-
-        
     }
 }

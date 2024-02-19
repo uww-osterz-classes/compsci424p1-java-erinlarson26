@@ -6,10 +6,6 @@ package compsci424.p1.java;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * The process control block structure that is used to track a
- * process's parent and children (if any) in Version 1.
- */
 public class Version1PCB {
     private int pid;
     private List<Version1PCB> children;

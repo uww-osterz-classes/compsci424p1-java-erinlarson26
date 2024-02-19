@@ -6,11 +6,6 @@ package compsci424.p1.java;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * The process control block structure that is used to track a
- * process's parent, first child, younger sibling, and older sibling
- * (if they exist) in Version 2.
- */
 public class Version2PCB {
     private int pid;
     private Version2PCB parent;
