@@ -15,7 +15,7 @@ public class Version1 {
     public Version1() {
     	pcbArray = new Version1PCB[16];
     	for(int i = 0; i < 16; i++) {
-    		pcbArray[i] = null;//new Version1PCB();
+    		pcbArray[i] = new Version1PCB(i);
     	}
     }
  
@@ -51,7 +51,7 @@ public class Version1 {
     		return 2;
     	}
     	
-    	pcbArray[childPid] = new Version1PCB();
+    	pcbArray[childPid] = new Version1PCB(childPid);
     	pcbArray[childPid].setParent(parentPid);
     	pcbArray[parentPid].addChild(childPid);
     	
