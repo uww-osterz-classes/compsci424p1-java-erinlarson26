@@ -73,24 +73,23 @@ public class Version1 {
     }
     
     void showProcessInfo() {
-    	System.out.println("Process Hierarchy (Version 1):");
-    	for(int i = 0; i < pcbArray.length; i++) {
-    		if(pcbArray[i] != null) {
-    			System.out.print("Process " + i + ":parent is " + pcbArray[i].getParent() +
-    					" and children are ");
-    			if(pcbArray[i].getChildren().isEmpty()) {
-    				System.out.println("empty");
-    			}
-    			else {
-    				for(int child : pcbArray[i].getChildren()) {
-    					System.out.print(child + " ");
-    				}
-    				System.out.println();
-    			}
-    		}
-    	}
-    	System.out.println();
-    }
+    	 System.out.println("Process Hierarchy (Version 1):");
+         for (int i = 0; i < pcbArray.length; i++) {
+             if (pcbArray[i] != null) {
+                 System.out.print("Process " + pcbArray[i].getProcessId() + ": parent is " + pcbArray[i].getParent() +
+                         " and children are ");
+                 if (pcbArray[i].getChildren().isEmpty()) {
+                     System.out.println("empty");
+                 } else {
+                     for (int child : pcbArray[i].getChildren()) {
+                         System.out.print(child + " ");
+                     }
+                     System.out.println();
+                 }
+             }
+         }
+         System.out.println();
+     }
       
     private int freePid() {
     	for(int i = 0; i < pcbArray.length; i++) {

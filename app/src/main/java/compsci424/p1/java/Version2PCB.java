@@ -8,12 +8,21 @@ public class Version2PCB {
    private int firstChild;
    private int youngerSibling;
    private int olderSibling;
+   private int processId;
    
    public Version2PCB() {
 	   parent = -1;
 	   firstChild = -1;
 	   youngerSibling = -1;
 	   olderSibling = -1;
+   }
+   
+   public Version2PCB(int processId) {
+	   this.processId = processId;
+   }
+   
+   public int getProcessId() {
+	   return processId;
    }
    
    public int getParent() {

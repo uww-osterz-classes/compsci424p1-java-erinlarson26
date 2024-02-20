@@ -7,9 +7,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Version1PCB {
+	private int processId;
     private int parent;
     private LinkedList<Integer> children;
     
+    public Version1PCB(int processId) {
+    	this.processId = processId;
+    	this.children = new LinkedList<>();
+    }
+    
+    public int getProcessId() {
+    	return processId;
+    }
     
     public Version1PCB() {
     	children = new LinkedList<>();
