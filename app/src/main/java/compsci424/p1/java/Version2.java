@@ -50,13 +50,20 @@ public class Version2 {
     	pcbArray[childPid] = new Version2PCB();
     	pcbArray[childPid].setParent(parentPid);
     	
-    	int youngestSibling = pcbArray[parentPid].getFirstChild();
-    	while(pcbArray[youngestSibling].getYoungerSibling() != -1) {
-    		youngestSibling = pcbArray[youngestSibling].getYoungerSibling();
-    	}
-    	
-    	pcbArray[youngestSibling].setYoungerSibling(childPid);
-    	pcbArray[childPid].setOlderSibling(youngestSibling);
+    	int parentFirstChild = pcbArray[parentPid].getFirstChild();
+        if (parentFirstChild == -1) {
+            // If parent has no children yet
+            pcbArray[parentPid].setFirstChild(childPid);
+        } else {
+            int youngestSibling = parentFirstChild;
+            while (pcbArray[youngestSibling].getYoungerSibling() != -1) {
+                youngestSibling = pcbArray[youngestSibling].getYoungerSibling();
+            }
+
+            pcbArray[youngestSibling].setYoungerSibling(childPid);
+            pcbArray[childPid].setOlderSibling(youngestSibling);
+        }
+
         return 0; 
     }
 
