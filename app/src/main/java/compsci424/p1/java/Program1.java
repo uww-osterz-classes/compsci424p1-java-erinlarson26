@@ -31,14 +31,27 @@ public class Program1 {
     		
     	while(true) {
     		System.out.println("Enter commands (create N, destroy N, or end): ");
-    		String command = scanner.next();
-    		if(command.equals("end")) {
+    		String inputLine = scanner.nextLine();
+    		if(inputLine.equals("end")) {
     			break;
     		}
     
-    		int pid = scanner.nextInt();
-    		scanner.nextLine();
-    		actions.add(command + " " + pid);
+    		String[] parts = inputLine.split("\\s+");
+    	    if (parts.length != 2) {
+    	        System.out.println("Invalid command format");
+    	        continue;
+    	    }
+
+    	    String command = parts[0];
+    	    int pid;
+    	    try {
+    	        pid = Integer.parseInt(parts[1]);
+    	    } catch (NumberFormatException e) {
+    	        System.out.println("Invalid process ID");
+    	        continue;
+    	    }
+
+    	    actions.add(command + " " + pid);
     	}
     	
     	//create objects for Version1 and Version2
