@@ -37,6 +37,7 @@ public class Program1 {
     		}
     
     		int pid = scanner.nextInt();
+    		scanner.nextLine();
     		actions.add(command + " " + pid);
     	}
     	
