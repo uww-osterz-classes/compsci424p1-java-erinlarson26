@@ -7,38 +7,28 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Version1PCB {
-    private int pid;
-    private List<Version1PCB> children;
-    private Version1PCB parent;
+    private int parent;
+    private LinkedList<Integer> children;
     
-    public Version1PCB(int pid) {
-    	this.pid = pid;
-    	this.children = new LinkedList<>();
-    	this.parent = null;
+    
+    public Version1PCB() {
+    	children = new LinkedList<>();
     }
     
-    public int getPid() {
-    	return pid;
-    }
-    
-    public List<Version1PCB> getChildren(){
-    	return children;
-    }
-    
-    public Version1PCB getParent() {
+    public int getParent() {
     	return parent;
     }
     
-    public void addChild(Version1PCB child) {
+    public void setParent(int parent) {
+    	this.parent = parent;
+    }
+    
+    public LinkedList<Integer> getChildren(){
+    	return children;
+    }
+    
+    public void addChild(int child) {
     	children.add(child);
-    	child.parent = this;
     }
-    
-    public void removeChild(int childPid) {
-    	children.removeIf(child -> child.getPid() == childPid);
-    }
-    
-    public String toString() {
-    	return "PID: " + pid;
-    }
+
 }

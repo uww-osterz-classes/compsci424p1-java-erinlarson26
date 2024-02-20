@@ -3,6 +3,8 @@
  */
 package compsci424.p1.java;
 
+import java.util.List;
+
 public class Version1 {
 	private Version1PCB[] pcbArray;
     /**
@@ -12,69 +14,86 @@ public class Version1 {
      */
     public Version1() {
     	pcbArray = new Version1PCB[16];
-    	pcbArray[0] = new Version1PCB(0);
+    	for(int i = 0; i < 16; i++) {
+    		pcbArray[i] = new Version1PCB();
+    	}
     }
  
+    public void runCommandSequence(List<String> actions) {
+    	for(String action : actions) {
+    		String[] parts = action.split(" ");
+    		String command = parts[0];
+    		int processId = Integer.parseInt(parts[1]);
+    		
+    		switch(command) {
+    		case "create":
+    			create(processId);
+    			break;
+    		case "destroy":
+    			destroy(processId);
+    			break;
+    		default:
+    			System.out.println("Invalid command");
+    		}
+    		showProcessInfo();
+    	}
+    }
+    
     int create(int parentPid) {
-    	if(parentPid < 0 || parentPid >= pcbArray.length || pcbArray[parentPid] == null) {
-    		System.out.println("Error: Parent process does not exist.");
+    	if(parentPid < 0 || parentPid >= pcbArray.length) {
+    		System.out.println("Invalid parent process ID");
     		return 1;
     	}
     	
     	int childPid = freePid();
     	if(childPid == -1) {
-    		System.out.println("Error: No free PIDs available for new processes.");
+    		System.out.println("No free PCB available for creation");
     		return 2;
     	}
     	
-    	Version1PCB childPCB = new Version1PCB(childPid);
-    	pcbArray[childPid] = childPCB;
-    	
-    	pcbArray[parentPid].addChild(childPCB);
+    	pcbArray[childPid].setParent(parentPid);
+    	pcbArray[parentPid].addChild(childPid);
     	
         return 0;
     }
 
     int destroy (int targetPid) {
     	if(targetPid < 0 || targetPid >= pcbArray.length || pcbArray[targetPid] == null ) {
-    		System.out.println("Error: Target process does not exist.");
+    		System.out.println("Invalid target process ID");
     		return 1;
     	}
     	
-    	destroyDescendants(targetPid);
-    	
-    	pcbArray[targetPid].getParent().removeChild(targetPid);
-    	
+    	for(int child : pcbArray[targetPid].getChildren()) {
+    		destroy(child);
+    	}
+  
     	pcbArray[targetPid] = null;
        
         return 0;
     }
     
-    private void destroyDescendants(int targetPid) {
-    	for(Version1PCB child : pcbArray[targetPid].getChildren()) {
-    		destroyDescendants(child.getPid());
-    		pcbArray[child.getPid()] = null;
-    	}
-    }
-
     void showProcessInfo() {
-    	showProcessInfoRecursive(pcbArray[0], 0);
-    }
-    
-    private void showProcessInfoRecursive(Version1PCB pcb, int indentLevel) {
-    	if(pcb != null) {
-    		for(int i = 0; i < indentLevel; i++) {
-    			System.out.print(" ");
-    		}
-    		System.out.println(pcb);
-    		for(Version1PCB child : pcb.getChildren()) {
-    			showProcessInfoRecursive(child, indentLevel + 1);
+    	System.out.println("Process Hierarchy (Version 1):");
+    	for(int i = 0; i < pcbArray.length; i++) {
+    		if(pcbArray[i] != null) {
+    			System.out.print("Process " + i + ":parent is " + pcbArray[i].getParent() +
+    					" and children are ");
+    			if(pcbArray[i].getChildren().isEmpty()) {
+    				System.out.println("empty");
+    			}
+    			else {
+    				for(int child : pcbArray[i].getChildren()) {
+    					System.out.print(child + " ");
+    				}
+    				System.out.println();
+    			}
     		}
     	}
+    	System.out.println();
     }
-    
+      
     private int freePid() {
-    	for(int i = 1; i < pcbArray.length; i++) {
+    	for(int i = 0; i < pcbArray.length; i++) {
     		if(pcbArray[i] == null) {
     			return i;
     		}

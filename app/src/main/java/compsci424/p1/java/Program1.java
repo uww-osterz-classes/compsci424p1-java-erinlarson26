@@ -26,47 +26,41 @@ public class Program1 {
      * @param args command-line arguments, which can be ignored
      */
     public static void main(String[] args) {
+    	List<String> actions = new LinkedList<>();
     	Scanner scanner = new Scanner(System.in);
-    	String command;
+    		
+    	while(true) {
+    		System.out.println("Enter commands (create N, destroy N, or end): ");
+    		String command = scanner.next();
+    		if(command.equals("end")) {
+    			break;
+    		}
+    
+    		int pid = scanner.nextInt();
+    		actions.add(command + " " + pid);
+    	}
+    	
+    	//create objects for Version1 and Version2
     	Version1 version1 = new Version1();
     	Version2 version2 = new Version2();
     	
-    	System.out.println("Enter commands (create N, destroy N, or end): ");
+    	System.out.println("Version 1:");
+    	version1.runCommandSequence(actions);
     	
-    	while(true) {
-    		command = scanner.nextLine().trim();
-    		
-    		if(command.equalsIgnoreCase("end") || (!command.startsWith("create") && !command.startsWith("destroy"))) {
-    			break;
-    		}
-    		String[] parts = command.split(" ");
-    		String action = parts[0];
-    		int pid = Integer.parseInt(parts[1]);
-    		
-    		if(action.equalsIgnoreCase("create")) {
-    			version1.create(pid);
-    			version2.create(pid);
-    		}
-    		else if(action.equalsIgnoreCase("destroy")) {
-    			version1.destroy(pid);
-    			version2.destroy(pid);
-    		}
-    	}
-    	
+    	System.out.println("Version 2:");
+    	version2.runCommandSequence(actions);
     	
     	
     	long startTimeV1 = System.currentTimeMillis();
     	for(int i = 0; i < 200; i++) {
-    		version1.create(i);
-    		version1.destroy(i);
+    		version1.runCommandSequence(actions);
     	}
     	long endTimeV1 = System.currentTimeMillis();
     	System.out.println("Version 1 running time: " + (endTimeV1 - startTimeV1) + " milliseconds");
     	
     	long startTimeV2 = System.currentTimeMillis();
     	for(int i = 0; i < 200; i++) {
-    		version2.create(i);
-    		version2.destroy(i);
+    		version2.runCommandSequence(actions);
     	}
     	long endTimeV2 = System.currentTimeMillis();
     	System.out.println("Version 2 running time: " + (endTimeV2 - startTimeV2) + "milliseconds");
