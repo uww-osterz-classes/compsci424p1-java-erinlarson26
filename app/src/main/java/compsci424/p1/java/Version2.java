@@ -47,6 +47,7 @@ public class Version2 {
     		return 2;
     	}
     	
+    	pcbArray[childPid] = new Version2PCB();
     	pcbArray[childPid].setParent(parentPid);
     	
     	int youngestSibling = pcbArray[parentPid].getFirstChild();

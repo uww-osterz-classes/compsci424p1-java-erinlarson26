@@ -51,6 +51,7 @@ public class Version1 {
     		return 2;
     	}
     	
+    	pcbArray[childPid] = new Version1PCB();
     	pcbArray[childPid].setParent(parentPid);
     	pcbArray[parentPid].addChild(childPid);
     	
