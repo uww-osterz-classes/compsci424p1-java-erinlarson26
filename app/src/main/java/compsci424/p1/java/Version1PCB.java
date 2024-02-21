@@ -32,9 +32,13 @@ public class Version1PCB {
     	children.add(childPid);
     }
     
-    public void markAsFree() {
-    	parent = -1;
-    	children.clear();
+    public void removeChild(int childPid) {
+    	children.remove(Integer.valueOf(childPid));
     }
+    
+    //public void markAsFree() {
+    //	parent = -1;
+    //	children.clear();
+    //}
 
 }

@@ -45,7 +45,9 @@ public class Version1 {
     		destroy(child);
     	}
   
-    	pcbArray[targetPid].markAsFree(); //= null;
+    	int parentPid = pcbArray[targetPid].getParent();
+    	pcbArray[parentPid].removeChild(targetPid);
+    	pcbArray[targetPid] = null;
        
         return 0;
     }
