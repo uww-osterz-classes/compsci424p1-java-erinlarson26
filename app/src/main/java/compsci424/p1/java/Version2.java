@@ -21,23 +21,32 @@ public class Version2 {
     		return 1;
     	}
 
-    	int newProcessId = pcbArray.length;
-    	pcbArray[newProcessId] = new Version2PCB(parentPid);
+    	int newProcessId = -1;
+        for (int i = 0; i < pcbArray.length; i++) {
+            if (pcbArray[i] == null) {
+                newProcessId = i;
+                break;
+            }
+        }
 
-    	if (pcbArray[parentPid].getFirstChild() == -1) {
-    		// First child case
-    		pcbArray[parentPid].setFirstChild(newProcessId);
-    	} else {
-    		// Sibling case
-    		int lastSibling = pcbArray[parentPid].getFirstChild();
-    		while (pcbArray[lastSibling].getYoungerSibling() != -1) {
-    			lastSibling = pcbArray[lastSibling].getYoungerSibling();
-    		}
+        if (newProcessId == -1) {
+            System.out.println("No free slot for new process");
+            return 1;
+        }
 
-    		// Update links
-    		pcbArray[lastSibling].setYoungerSibling(newProcessId);
-    		pcbArray[newProcessId].setOlderSibling(lastSibling);
-    	}
+        pcbArray[newProcessId] = new Version2PCB(parentPid);
+
+        if (pcbArray[parentPid].getFirstChild() == -1) {
+            pcbArray[parentPid].setFirstChild(newProcessId);
+        } else {
+            int lastSibling = pcbArray[parentPid].getFirstChild();
+            while (pcbArray[lastSibling].getYoungerSibling() != -1) {
+                lastSibling = pcbArray[lastSibling].getYoungerSibling();
+            }
+
+            pcbArray[lastSibling].setYoungerSibling(newProcessId);
+            pcbArray[newProcessId].setOlderSibling(lastSibling);
+        }
 
     	System.out.println("Process " + newProcessId + " created under Process " + parentPid);
 
@@ -52,6 +61,17 @@ public class Version2 {
     	}
     	
     	pcbArray[targetPid].markAsFree();
+    	
+    	int olderSibling = pcbArray[targetPid].getOlderSibling();
+        int youngerSibling = pcbArray[targetPid].getYoungerSibling();
+
+        if (olderSibling != -1) {
+            pcbArray[olderSibling].setYoungerSibling(youngerSibling);
+        }
+
+        if (youngerSibling != -1) {
+            pcbArray[youngerSibling].setOlderSibling(olderSibling);
+        }
     	
        return 0;
    }
