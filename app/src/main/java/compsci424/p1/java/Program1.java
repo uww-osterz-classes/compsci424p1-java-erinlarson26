@@ -26,92 +26,76 @@ public class Program1 {
      * @param args command-line arguments, which can be ignored
      */
     public static void main(String[] args) {
-    	Scanner scanner = new Scanner(System.in);
-    		
-    	int n = 16;
-    	
-    	Version1 version1 = new Version1(n);
-    	Version2 version2 = new Version2(n);
-    	
-    	List<String> commands = new LinkedList<>();
-    	
-    	System.out.println("Enter commands of the form 'create N', 'destroy N', or 'end':");
-    	String command;
-    	while(true) {
-    		command = scanner.nextLine();
-    		if(command.equals("end")) {
-    			break;
-    		}
-    		commands.add(command);
-    	}
-    	
-    	for (String cmd : commands) {
-            String[] parts = cmd.split(" ");
-            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
-                System.out.println("Invalid command format: " + cmd);
-                continue; // Skip processing this command
-            }
+    	 Scanner scanner = new Scanner(System.in);
 
-            if (parts[0].equals("create")) {
-                int parentPid = Integer.parseInt(parts[1]);
-                version1.create(parentPid);
-            } else if (parts[0].equals("destroy")) {
-                int targetPid = Integer.parseInt(parts[1]);
-                version1.destroy(targetPid);
-            }
-        }
-    	version1.showProcessInfo();
-    	
-    	for (String cmd : commands) {
-            String[] parts = cmd.split(" ");
-            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
-                // Similar error handling for Version2
-                System.out.println("Invalid command format: " + cmd);
-                continue;
-            }
+         List<String> commands = new LinkedList<>();
 
-            if (parts[0].equals("create")) {
-                int parentPid = Integer.parseInt(parts[1]);
-                version2.create(parentPid);
-            } else if (parts[0].equals("destroy")) {
-                int targetPid = Integer.parseInt(parts[1]);
-                version2.destroy(targetPid);
-            }
-        }
-    	version2.showProcessInfo();
-    	
-    	long startTimeV1 = System.currentTimeMillis();
-        for (int i = 0; i < 200; i++) {
-            for (String cmd : commands) {
-                if (cmd.startsWith("create")) {
-                    int parentPid = Integer.parseInt(cmd.split(" ")[1]);
-                    version1.create(parentPid);
-                } else if (cmd.startsWith("destroy")) {
-                    int targetPid = Integer.parseInt(cmd.split(" ")[1]);
-                    version1.destroy(targetPid);
-                }
-            }
-        }
-        long endTimeV1 = System.currentTimeMillis();
-        System.out.println("Version1 running time: " + (endTimeV1 - startTimeV1) + " milliseconds");
+         System.out.println("Enter commands of the form 'create N', 'destroy N', or 'end':");
 
-        // Measure and display running time for Version2
-        long startTimeV2 = System.currentTimeMillis();
-        for (int i = 0; i < 200; i++) {
-            for (String cmd : commands) {
-                if (cmd.startsWith("create")) {
-                    int parentPid = Integer.parseInt(cmd.split(" ")[1]);
-                    version2.create(parentPid);
-                } else if (cmd.startsWith("destroy")) {
-                    int targetPid = Integer.parseInt(cmd.split(" ")[1]);
-                    version2.destroy(targetPid);
-                }
-            }
-        }
-        long endTimeV2 = System.currentTimeMillis();
-        System.out.println("Version2 running time: " + (endTimeV2 - startTimeV2) + " milliseconds");
+         while (true) {
+             String command = scanner.nextLine().trim();
+             if (command.equals("end") || !command.matches("(create|destroy) \\d+")) {
+                 break;
+             }
+             commands.add(command);
+         }
 
-        scanner.close();
-    	
-    }
+         Version1 version1 = new Version1(16);
+         Version2 version2 = new Version2(16);
+
+         // Run command sequence once with Version 1 and display changes
+         System.out.println("Running command sequence with Version 1:");
+         runCommands(version1, commands);
+
+         // Reset Version 1 state for Version 2
+         version1 = new Version1(16);
+
+         // Run command sequence once with Version 2 and display changes
+         System.out.println("\nRunning command sequence with Version 2:");
+         runCommands(version2, commands);
+
+         // Measure and display running time for Version 1 (200 times)
+         long startTimeV1 = System.currentTimeMillis();
+         for (int i = 0; i < 200; i++) {
+             runCommands(version1, commands);
+         }
+         long endTimeV1 = System.currentTimeMillis();
+         System.out.println("\nVersion 1 running time: " + (endTimeV1 - startTimeV1) + " milliseconds");
+
+         // Measure and display running time for Version 2 (200 times)
+         version1 = new Version1(16); // Reset Version 1 state
+         long startTimeV2 = System.currentTimeMillis();
+         for (int i = 0; i < 200; i++) {
+             runCommands(version2, commands);
+         }
+         long endTimeV2 = System.currentTimeMillis();
+         System.out.println("Version 2 running time: " + (endTimeV2 - startTimeV2) + " milliseconds");
+
+         scanner.close();
+     }
+
+     private static void runCommands(Version1 version, List<String> commands) {
+         for (String cmd : commands) {
+             String[] parts = cmd.split(" ");
+             int param = Integer.parseInt(parts[1]);
+             if (parts[0].equals("create")) {
+                 version.create(param);
+             } else if (parts[0].equals("destroy")) {
+                 version.destroy(param);
+             }
+         }
+     }
+
+     private static void runCommands(Version2 version, List<String> commands) {
+         for (String cmd : commands) {
+             String[] parts = cmd.split(" ");
+             int param = Integer.parseInt(parts[1]);
+             if (parts[0].equals("create")) {
+                 version.create(param);
+             } else if (parts[0].equals("destroy")) {
+                 version.destroy(param);
+             }
+         }
+     }
 }
+
