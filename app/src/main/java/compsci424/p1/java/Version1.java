@@ -20,56 +20,50 @@ public class Version1 {
     }
  
     int create(int parentPid) {
-    	if(parentPid < 0 || parentPid >= pcbArray.length) {
-    		System.out.println("Invalid parent process ID");
-    		return 1;
-    	}
-    	
-    	int newProcessId = -1;
-    	for (int i = 0; i < pcbArray.length; i++) {
-            if (pcbArray[i] == null) {
-                newProcessId = i;
-                break;
-            }
+    	int childPid = findFreePCB();
+        if (childPid != -1) {
+            pcbArray[childPid].setParent(parentPid);
+            pcbArray[parentPid].getChildren().add(childPid);
         }
-
-        if (newProcessId == -1) {
-            System.out.println("No free slot for new process");
-            return 1;
-        }
-    	
-    	pcbArray[newProcessId] = new Version1PCB(parentPid);
-    	pcbArray[parentPid].addChild(newProcessId);
-    	
-    	System.out.println("Process " + newProcessId + " created under Process " + parentPid);
     	
         return 0;
     }
 
     int destroy (int targetPid) {
-    	if(targetPid < 0 || targetPid >= pcbArray.length) {
-    		System.out.println("Invalid target process ID");
-    		return 1;
-    	}
-    	
-    	for(int child : pcbArray[targetPid].getChildren()) {
-    		destroy(child);
-    	}
-  
-    	int parentPid = pcbArray[targetPid].getParent();
-    	pcbArray[parentPid].removeChild(targetPid);
-    	pcbArray[targetPid] = null;
+    	if (pcbArray[targetPid] != null) {
+            for (int child : pcbArray[targetPid].getChildren()) {
+                destroy(child);
+            }
+            pcbArray[targetPid] = null;
+            int parentPid = pcbArray[targetPid].getParent();
+            pcbArray[parentPid].getChildren().remove((Integer) targetPid);
+        }
        
         return 0;
     }
     
     void showProcessInfo() {
-    	for (int i = 0; i < pcbArray.length; i++) {
-    		System.out.print("Process " + i + ": parent is " + pcbArray[i].getParent());
-    		if (!pcbArray[i].getChildren().isEmpty()) {
-    			System.out.print(" and children are " + pcbArray[i].getChildren());
-    		}
-    		System.out.println();
-    	}
+    	  for (int i = 0; i < pcbArray.length; i++) {
+              if (pcbArray[i] != null) {
+                  System.out.print("Process " + i + ": parent is " + pcbArray[i].getParent() + " and children are ");
+                  if (pcbArray[i].getChildren().isEmpty()) {
+                      System.out.println("empty");
+                  } else {
+                      for (int child : pcbArray[i].getChildren()) {
+                          System.out.print(child + " ");
+                      }
+                      System.out.println();
+                  }
+              }
+          }
+      }
+    
+    private int findFreePCB() {
+        for (int i = 0; i < pcbArray.length; i++) {
+            if (pcbArray[i] == null) {
+                return i;
+            }
+        }
+        return -1;
     }
 }

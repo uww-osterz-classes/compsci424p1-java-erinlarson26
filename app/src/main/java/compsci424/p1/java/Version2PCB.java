@@ -8,53 +8,58 @@ public class Version2PCB {
    private int firstChild;
    private int youngerSibling;
    private int olderSibling;
+   private int children;
    
    public Version2PCB() {
-	   this.parent = -1;
-	   this.firstChild = -1;
-	   this.youngerSibling = -1;
-	   this.olderSibling = -1;
+	   this.setParent(-1);
+	   this.setFirstChild(-1);
+	   this.setYoungerSibling(-1);
+	   this.setOlderSibling(-1);
    }
+
+public int getOlderSibling() {
+	return olderSibling;
+}
+
+public void setOlderSibling(int olderSibling) {
+	this.olderSibling = olderSibling;
+}
+
+public int getYoungerSibling() {
+	return youngerSibling;
+}
+
+public void setYoungerSibling(int youngerSibling) {
+	this.youngerSibling = youngerSibling;
+}
+
+public int getParent() {
+	return parent;
+}
+
+public void setParent(int parent) {
+	this.parent = parent;
+}
+
+public int getFirstChild() {
+	return firstChild;
+}
+
+public void setFirstChild(int firstChild) {
+	this.firstChild = firstChild;
+}
+
+public int getChildren() {
+	return children;
+}
+
+public void setChildren(int children) {
+	this.children = children;
+}
    
-   public Version2PCB(int parent) {
-	   this.parent = parent;
-	   this.firstChild = -1;
-	   this.youngerSibling = -1;
-	   this.olderSibling = -1;
-   }
+   
+
+
     
-   public int getParent() {
-	   return parent;
-   }
-    
-   public int getFirstChild() {
-	   return firstChild;
-   }
-   
-   public void setFirstChild(int firstChild) {
-	   this.firstChild = firstChild;
-   }
-   
-   public int getYoungerSibling() {
-	   return youngerSibling;
-   }
-   
-   public void setYoungerSibling(int youngerSibling) {
-	   this.youngerSibling = youngerSibling;
-   }
-   
-   public int getOlderSibling() {
-	   return olderSibling;
-   }
-   
-   public void setOlderSibling(int olderSibling) {
-	   this.olderSibling = olderSibling;
-   }
-   
-   public void markAsFree() {
-	   parent = -1;
-	   firstChild = -1;
-	   youngerSibling = -1;
-	   olderSibling = -1;
-   }
+  
 }

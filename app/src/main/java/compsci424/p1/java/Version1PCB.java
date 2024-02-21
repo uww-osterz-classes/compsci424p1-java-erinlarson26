@@ -8,37 +8,28 @@ import java.util.List;
 
 public class Version1PCB {
     private int parent;
-    private LinkedList<Integer> children;
+    private List<Integer> children;
      
     public Version1PCB() {
-    	this.parent = -1;
-    	this.children = new LinkedList<>();
+    	this.setParent(-1);
+    	this.setChildren(new LinkedList<>());
     }
+
+	public List<Integer> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<Integer> children) {
+		this.children = children;
+	}
+
+	public int getParent() {
+		return parent;
+	}
+
+	public void setParent(int parent) {
+		this.parent = parent;
+	}
     
-    public Version1PCB(int parent) {
-    	this.parent = parent;
-    	this.children = new LinkedList<>();
-    }
-    
-    public int getParent() {
-    	return parent;
-    }
-    
-    public List<Integer> getChildren(){
-    	return children;
-    }
-    
-    public void addChild(int childPid) {
-    	children.add(childPid);
-    }
-    
-    public void removeChild(int childPid) {
-    	children.remove(Integer.valueOf(childPid));
-    }
-    
-    //public void markAsFree() {
-    //	parent = -1;
-    //	children.clear();
-    //}
 
 }

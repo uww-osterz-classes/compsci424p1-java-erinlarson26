@@ -16,73 +16,76 @@ public class Version2 {
     }
 
     int create(int parentPid) {
-    	if(parentPid < 0 || parentPid >= pcbArray.length) {
-    		System.out.println("Invalid parent process ID");
-    		return 1;
-    	}
-
-    	int newProcessId = -1;
-        for (int i = 0; i < pcbArray.length; i++) {
-            if (pcbArray[i] == null) {
-                newProcessId = i;
-                break;
+    	int childPid = findFreePCB();
+        if (childPid != -1) {
+            pcbArray[childPid].setParent(parentPid);
+            int olderSibling = findOlderSibling(parentPid);
+            if (olderSibling != -1) {
+                pcbArray[olderSibling].setYoungerSibling(childPid);
+                pcbArray[childPid].setOlderSibling(olderSibling);
+            } else {
+                pcbArray[parentPid].setFirstChild(childPid);
             }
         }
-
-        if (newProcessId == -1) {
-            System.out.println("No free slot for new process");
-            return 1;
-        }
-
-        pcbArray[newProcessId] = new Version2PCB(parentPid);
-
-        if (pcbArray[parentPid].getFirstChild() == -1) {
-            pcbArray[parentPid].setFirstChild(newProcessId);
-        } else {
-            int lastSibling = pcbArray[parentPid].getFirstChild();
-            while (pcbArray[lastSibling].getYoungerSibling() != -1) {
-                lastSibling = pcbArray[lastSibling].getYoungerSibling();
-            }
-
-            pcbArray[lastSibling].setYoungerSibling(newProcessId);
-            pcbArray[newProcessId].setOlderSibling(lastSibling);
-        }
-
-    	System.out.println("Process " + newProcessId + " created under Process " + parentPid);
-
 
     	return 0; 
     }
 
     int destroy (int targetPid) {
-    	if(targetPid < 0 || targetPid >= pcbArray.length) {
-    		System.out.println("Invalid target process ID");
-    		return 1;
-    	}
-    	
-    	pcbArray[targetPid].markAsFree();
-    	
-    	int olderSibling = pcbArray[targetPid].getOlderSibling();
-        int youngerSibling = pcbArray[targetPid].getYoungerSibling();
+    	if (pcbArray[targetPid] != null) {
+            int youngerSibling = pcbArray[targetPid].getYoungerSibling();
+            while (youngerSibling != -1) {
+                int nextSibling = pcbArray[youngerSibling].getYoungerSibling();
+                destroy(youngerSibling);
+                youngerSibling = nextSibling;
+            }
 
-        if (olderSibling != -1) {
-            pcbArray[olderSibling].setYoungerSibling(youngerSibling);
-        }
+            int olderSibling = pcbArray[targetPid].getOlderSibling();
+            int parentPid = pcbArray[targetPid].getParent();
 
-        if (youngerSibling != -1) {
-            pcbArray[youngerSibling].setOlderSibling(olderSibling);
+            if (olderSibling != -1) {
+                pcbArray[olderSibling].setYoungerSibling(pcbArray[targetPid].getYoungerSibling());
+            } else {
+                pcbArray[parentPid].setFirstChild(pcbArray[targetPid].getYoungerSibling());
+            }
+
+            if (pcbArray[targetPid].getYoungerSibling() != -1) {
+                pcbArray[pcbArray[targetPid].getYoungerSibling()].setOlderSibling(olderSibling);
+            }
+
+            pcbArray[targetPid] = null;
         }
-    	
        return 0;
    }
     
    void showProcessInfo() {
-	    int current = pcbArray[0].getFirstChild();
-
-        while (current != -1) {
-            System.out.print("Process " + current + ": parent is " + pcbArray[current].getParent());
-            current = pcbArray[current].getYoungerSibling();
-            System.out.println();
-        }
-    }
+	   for (int i = 0; i < pcbArray.length; i++) {
+           if (pcbArray[i] != null) {
+               System.out.print("Process " + i + ": parent is " + pcbArray[i].getParent() +
+                       ", first child is " + pcbArray[i].getFirstChild() +
+                       ", younger sibling is " + pcbArray[i].getYoungerSibling() +
+                       ", older sibling is " + pcbArray[i].getOlderSibling() + "\n");
+           }
+       }
+   }
+   
+   private int findFreePCB() {
+       for (int i = 0; i < pcbArray.length; i++) {
+           if (pcbArray[i] == null) {
+               return i;
+           }
+       }
+       return -1;
+   }
+   
+   private int findOlderSibling(int parentPid) {
+       int currentChild = pcbArray[parentPid].getFirstChild();
+       int olderSibling = -1;
+       while (currentChild != -1) {
+           olderSibling = currentChild;
+           currentChild = pcbArray[currentChild].getYoungerSibling();
+       }
+       return olderSibling;
+   }
 }
+
