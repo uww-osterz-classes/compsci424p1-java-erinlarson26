@@ -35,9 +35,10 @@ public class Version1 {
             for (int child : pcbArray[targetPid].getChildren()) {
                 destroy(child);
             }
-            pcbArray[targetPid] = null;
+            
             int parentPid = pcbArray[targetPid].getParent();
             pcbArray[parentPid].getChildren().remove((Integer) targetPid);
+            pcbArray[targetPid] = null;
         }
        
         return 0;
