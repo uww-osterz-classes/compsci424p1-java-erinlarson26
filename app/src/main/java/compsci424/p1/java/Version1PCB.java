@@ -7,37 +7,34 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Version1PCB {
-	private int processId;
     private int parent;
     private LinkedList<Integer> children;
-    
-    public Version1PCB(int processId) {
-    	this.processId = processId;
+     
+    public Version1PCB() {
+    	this.parent = -1;
     	this.children = new LinkedList<>();
     }
     
-    public int getProcessId() {
-    	return processId;
-    }
-    
-    public Version1PCB() {
-    	children = new LinkedList<>();
+    public Version1PCB(int parent) {
+    	this.parent = parent;
+    	this.children = new LinkedList<>();
     }
     
     public int getParent() {
     	return parent;
     }
     
-    public void setParent(int parent) {
-    	this.parent = parent;
-    }
-    
-    public LinkedList<Integer> getChildren(){
+    public List<Integer> getChildren(){
     	return children;
     }
     
-    public void addChild(int child) {
-    	children.add(child);
+    public void addChild(int childPid) {
+    	children.add(childPid);
+    }
+    
+    public void markAsFree() {
+    	parent = -1;
+    	children.clear();
     }
 
 }

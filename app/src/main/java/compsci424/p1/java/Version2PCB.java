@@ -8,31 +8,25 @@ public class Version2PCB {
    private int firstChild;
    private int youngerSibling;
    private int olderSibling;
-   private int processId;
    
    public Version2PCB() {
-	   parent = -1;
-	   firstChild = -1;
-	   youngerSibling = -1;
-	   olderSibling = -1;
+	   this.parent = -1;
+	   this.firstChild = -1;
+	   this.youngerSibling = -1;
+	   this.olderSibling = -1;
    }
    
-   public Version2PCB(int processId) {
-	   this.processId = processId;
+   public Version2PCB(int parent) {
+	   this.parent = parent;
+	   this.firstChild = -1;
+	   this.youngerSibling = -1;
+	   this.olderSibling = -1;
    }
-   
-   public int getProcessId() {
-	   return processId;
-   }
-   
+    
    public int getParent() {
 	   return parent;
    }
-   
-   public void setParent(int parent) {
-	   this.parent = parent;
-   }
-   
+    
    public int getFirstChild() {
 	   return firstChild;
    }
@@ -55,5 +49,12 @@ public class Version2PCB {
    
    public void setOlderSibling(int olderSibling) {
 	   this.olderSibling = olderSibling;
+   }
+   
+   public void markAsFree() {
+	   parent = -1;
+	   firstChild = -1;
+	   youngerSibling = -1;
+	   olderSibling = -1;
    }
 }
