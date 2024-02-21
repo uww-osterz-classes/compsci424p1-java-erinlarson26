@@ -25,7 +25,18 @@ public class Version1 {
     		return 1;
     	}
     	
-    	int newProcessId = pcbArray.length;
+    	int newProcessId = -1;
+    	for (int i = 0; i < pcbArray.length; i++) {
+            if (pcbArray[i] == null) {
+                newProcessId = i;
+                break;
+            }
+        }
+
+        if (newProcessId == -1) {
+            System.out.println("No free slot for new process");
+            return 1;
+        }
     	
     	pcbArray[newProcessId] = new Version1PCB(parentPid);
     	pcbArray[parentPid].addChild(newProcessId);
