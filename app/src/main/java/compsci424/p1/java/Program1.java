@@ -38,35 +38,46 @@ public class Program1 {
     	System.out.println("Enter commands of the form 'create N', 'destroy N', or 'end':");
     	String command;
     	while(true) {
-    		command = scanner.next();
+    		command = scanner.nextLine();
     		if(command.equals("end")) {
     			break;
     		}
     		commands.add(command);
     	}
     	
-    	for(String cmd : commands) {
-    		if(cmd.startsWith("create")) {
-    			int parentPid = Integer.parseInt(cmd.split(" ")[1]);
-    			version1.create(parentPid);
-    		}
-    		else if(cmd.startsWith("destroy")) {
-    			int targetPid = Integer.parseInt(cmd.split(" ")[1]);
-    			version1.destroy(targetPid);
-    		}
-    	}
+    	for (String cmd : commands) {
+            String[] parts = cmd.split(" ");
+            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
+                System.out.println("Invalid command format: " + cmd);
+                continue; // Skip processing this command
+            }
+
+            if (parts[0].equals("create")) {
+                int parentPid = Integer.parseInt(parts[1]);
+                version1.create(parentPid);
+            } else if (parts[0].equals("destroy")) {
+                int targetPid = Integer.parseInt(parts[1]);
+                version1.destroy(targetPid);
+            }
+        }
     	version1.showProcessInfo();
     	
-    	for(String cmd : commands) {
-    		if(cmd.startsWith("create")) {
-    			int parentPid = Integer.parseInt(cmd.split(" ")[1]);
-    			version2.create(parentPid);
-    		}
-    		else if(cmd.startsWith("destroy")) {
-    			int targetPid = Integer.parseInt(cmd.split(" ")[1]);
-    			version2.destroy(targetPid);
-    		}
-    	}
+    	for (String cmd : commands) {
+            String[] parts = cmd.split(" ");
+            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
+                // Similar error handling for Version2
+                System.out.println("Invalid command format: " + cmd);
+                continue;
+            }
+
+            if (parts[0].equals("create")) {
+                int parentPid = Integer.parseInt(parts[1]);
+                version2.create(parentPid);
+            } else if (parts[0].equals("destroy")) {
+                int targetPid = Integer.parseInt(parts[1]);
+                version2.destroy(targetPid);
+            }
+        }
     	version2.showProcessInfo();
     	
     	long startTimeV1 = System.currentTimeMillis();
