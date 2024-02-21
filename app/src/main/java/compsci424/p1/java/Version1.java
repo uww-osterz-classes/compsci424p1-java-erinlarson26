@@ -15,8 +15,10 @@ public class Version1 {
     public Version1(int n) {
     	pcbArray = new Version1PCB[n];
     	pcbArray[0] = new Version1PCB();
+    	
+    	
     	for(int i = 1; i < n; i++) {
-    		pcbArray[i] = new Version1PCB();
+    		pcbArray[i] = null; //new Version1PCB();
     	}
     }
  
