@@ -17,9 +17,9 @@ public class Version1 {
     	pcbArray[0] = new Version1PCB();
     	
     	
-    	for(int i = 1; i < n; i++) {
+    /*	for(int i = 1; i < n; i++) {
     		pcbArray[i] = null; //new Version1PCB();
-    	}
+    	}*/
     }
  
     int create(int parentPid) {
