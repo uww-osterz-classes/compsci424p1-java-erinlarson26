@@ -54,8 +54,8 @@ public class Program1 {
     			int targetPid = Integer.parseInt(cmd.split(" ")[1]);
     			version1.destroy(targetPid);
     		}
-    		version1.showProcessInfo();
     	}
+    	version1.showProcessInfo();
     	
     	for(String cmd : commands) {
     		if(cmd.startsWith("create")) {
@@ -66,8 +66,8 @@ public class Program1 {
     			int targetPid = Integer.parseInt(cmd.split(" ")[1]);
     			version2.destroy(targetPid);
     		}
-    		version2.showProcessInfo();
     	}
+    	version2.showProcessInfo();
     	
     	long startTimeV1 = System.currentTimeMillis();
         for (int i = 0; i < 200; i++) {
