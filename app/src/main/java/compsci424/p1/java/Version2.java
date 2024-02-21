@@ -61,29 +61,20 @@ public class Version2 {
     
    void showProcessInfo() {
 	   for (int i = 0; i < pcbArray.length; i++) {
-           System.out.println("Process " + i + ": " + getProcessInfo(i));
-       } 
+	        if (pcbArray[i] != null) {
+	            System.out.print("Process " + i + ": parent is " + pcbArray[i].getParent() + " and children are ");
+	            if (pcbArray[i].getFirstChild() != -1) {
+	                for (int child = pcbArray[i].getFirstChild(); child != -1; child = pcbArray[child].getYoungerSibling()) {
+	                    System.out.print(child + " ");
+	                }
+	            } else {
+	                System.out.print("empty");
+	            }
+	            System.out.println();
+	        }
+	    }
    }
    
-   private String getProcessInfo(int pid) {
-       StringBuilder info = new StringBuilder("parent is ");
-       info.append(pcbArray[pid].getParent());
-
-       if (pcbArray[pid].getFirstChild() != -1) {
-           info.append(" and children are ");
-           int child = pcbArray[pid].getFirstChild();
-           info.append(child);
-
-           while (pcbArray[child].getYoungerSibling() != -1) {
-               child = pcbArray[child].getYoungerSibling();
-               info.append(" ").append(child);
-           }
-       } else {
-           info.append("empty");
-       }
-
-       return info.toString();
-   }
    
    private int findFreePCB() {
        for (int i = 0; i < pcbArray.length; i++) {
