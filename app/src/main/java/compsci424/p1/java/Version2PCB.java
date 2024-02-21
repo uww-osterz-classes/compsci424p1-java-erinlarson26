@@ -11,7 +11,7 @@ public class Version2PCB {
    private int children;
    
    public Version2PCB() {
-	   this.setParent(-1);
+	   this.setParent(-2);
 	   this.setFirstChild(-1);
 	   this.setYoungerSibling(-1);
 	   this.setOlderSibling(-1);
