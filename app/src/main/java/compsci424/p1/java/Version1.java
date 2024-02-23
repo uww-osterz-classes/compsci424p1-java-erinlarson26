@@ -53,7 +53,15 @@ public class Version1 {
             if (pcbArray[i].children.isEmpty()) {
                 System.out.println("children are empty");
             } else {
-                System.out.println("children are " + pcbArray[i].children.toString());
+                System.out.print("children are ");
+                List<Integer> children = pcbArray[i].children;
+                for (int j = 0; j < children.size(); j++) {
+                    System.out.print(children.get(j));
+                    if (j < children.size() - 1) {
+                        System.out.print(" ");
+                    }
+                }
+                System.out.println();
             }
         }
     }
