@@ -32,7 +32,7 @@ public class Version2 {
     			youngestChild = pcbArray[youngestChild].youngerSibling;
     		}
     		pcbArray[youngestChild].youngerSibling = q;
-    		pcbArray[q] = new Version2PCB(-2);
+    		//pcbArray[q] = new Version2PCB(-2);
     		pcbArray[q].olderSibling = youngestChild;
     	}
 
@@ -40,6 +40,7 @@ public class Version2 {
     }
 
     int destroy (int targetPid) {
+    	
     	int parent = pcbArray[targetPid].parent;
     	int olderSibling = pcbArray[targetPid].olderSibling;
     	int youngerSibling = pcbArray[targetPid].youngerSibling;
@@ -55,11 +56,13 @@ public class Version2 {
     		pcbArray[youngerSibling].olderSibling = olderSibling;
     	}
     	
+    	if(pcbArray[targetPid].firstChild != -1) {
     	for(int child = pcbArray[targetPid].firstChild; child != -1;) {
     		int nextChild = pcbArray[child].youngerSibling;
     		destroy(child);
     		freePCB(child);
     		child = nextChild;
+    	}
     	}
     	freePCB(targetPid);
        return 0;
