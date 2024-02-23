@@ -10,8 +10,8 @@ public class Version1PCB {
     int parent;
     List<Integer> children;
      
-    public Version1PCB() {
-    	this.parent = -1;
+    public Version1PCB(int parent) {
+    	this.parent = parent;
     	this.children = new LinkedList<>();
     }
     

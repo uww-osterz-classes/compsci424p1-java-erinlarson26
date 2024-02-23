@@ -6,7 +6,7 @@ package compsci424.p1.java;
 import java.util.List;
 
 public class Version1 {
-	private Version1PCB[] pcbArray;
+	private static Version1PCB[] pcbArray;
     /**
      * Default constructor. Use this to allocate (if needed) and
      * initialize the PCB array, create the PCB for process 0, and do
@@ -14,35 +14,25 @@ public class Version1 {
      */
     public Version1(int n) {
     	pcbArray = new Version1PCB[n];
-    	pcbArray[0] = new Version1PCB();
-    	
-    	
-    	for(int i = 1; i < n; i++) {
-    		pcbArray[i] = new Version1PCB();
+    	for(int i = 0; i < n; i++) {
+    		pcbArray[i] = new Version1PCB(i == 0 ? -1 : -2);
     	}
     }
  
     int create(int parentPid) {
-    	int childPid = findFreePCB();
-    	if(childPid != -1) {
-       // pcbArray[childPid] = new Version1PCB();
-    	pcbArray[childPid].parent = parentPid;
-        pcbArray[parentPid].children.add(childPid);
-    	}
+    	int q = allocatePCB();
+    	pcbArray[q].parent = parentPid;
+    	pcbArray[parentPid].children.add(q);
         return 0;
     }
 
     int destroy (int targetPid) {
-    	if (pcbArray[targetPid] != null) {
-            for (int child : pcbArray[targetPid].children) {
-                destroy(child);
-            }
-            
-            pcbArray[targetPid] = new Version1PCB();
-           // int parentPid = pcbArray[targetPid].getParent();
-           // pcbArray[parentPid].getChildren().remove((Integer) targetPid);
-           // pcbArray[targetPid] = null;
-        }
+    	for(int child : pcbArray[targetPid].children) {
+    		destroy(child);
+    		freePCB(child);
+    	}
+    	pcbArray[targetPid].children.clear();
+    	freePCB(targetPid);
        
         return 0;
     }
@@ -66,12 +56,17 @@ public class Version1 {
         }
     }
     
-    private int findFreePCB() {
-        for (int i = 0; i < pcbArray.length; i++) {
-            if (pcbArray[i].parent == -1 && pcbArray[i].children.isEmpty()) { //== null
-                return i;
-            }
-        }
-        return -1;
+    private static int allocatePCB() {
+    	for(int i = 0; i < pcbArray.length; i++) {
+    		if(pcbArray[i].parent == -2) {
+    			pcbArray[i].parent = -1;
+    			return i;
+    		}
+    	}
+    	throw new RuntimeException("No free PCB available.");
+    }
+    
+    private static void freePCB(int index) {
+        pcbArray[index] = new Version1PCB(-1);
     }
 }
