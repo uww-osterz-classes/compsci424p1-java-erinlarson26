@@ -24,48 +24,42 @@ public class Version1 {
  
     int create(int parentPid) {
     	int childPid = findFreePCB();
-        if (childPid != -1) {
-        	pcbArray[childPid] = new Version1PCB();
-            pcbArray[childPid].setParent(parentPid);
-            pcbArray[parentPid].getChildren().add(childPid);
-        }
+       // pcbArray[childPid] = new Version1PCB();
+    	pcbArray[childPid].parent = parentPid;
+        pcbArray[parentPid].children.add(childPid);
     	
         return 0;
     }
 
     int destroy (int targetPid) {
     	if (pcbArray[targetPid] != null) {
-            for (int child : pcbArray[targetPid].getChildren()) {
+            for (int child : pcbArray[targetPid].children) {
                 destroy(child);
             }
             
-            int parentPid = pcbArray[targetPid].getParent();
-            pcbArray[parentPid].getChildren().remove((Integer) targetPid);
-            pcbArray[targetPid] = null;
+            pcbArray[targetPid] = new Version1PCB();
+           // int parentPid = pcbArray[targetPid].getParent();
+           // pcbArray[parentPid].getChildren().remove((Integer) targetPid);
+           // pcbArray[targetPid] = null;
         }
        
         return 0;
     }
     
     void showProcessInfo() {
-    	  for (int i = 0; i < pcbArray.length; i++) {
-              if (pcbArray[i] != null) {
-                  System.out.print("Process " + i + ": parent is " + pcbArray[i].getParent() + " and children are ");
-                  if (pcbArray[i].getChildren().isEmpty()) {
-                      System.out.println("empty");
-                  } else {
-                      for (int child : pcbArray[i].getChildren()) {
-                          System.out.print(child + " ");
-                      }
-                      System.out.println();
-                  }
-              }
-          }
-      }
+    	for (int i = 0; i < pcbArray.length; i++) {
+            System.out.print("Process " + i + ": parent is " + pcbArray[i].parent + " and ");
+            if (pcbArray[i].children.isEmpty()) {
+                System.out.println("children are empty");
+            } else {
+                System.out.println("children are " + pcbArray[i].children.toString());
+            }
+        }
+    }
     
     private int findFreePCB() {
         for (int i = 0; i < pcbArray.length; i++) {
-            if (pcbArray[i] == null) {
+            if (pcbArray[i].parent == -1 ) { //== null
                 return i;
             }
         }
