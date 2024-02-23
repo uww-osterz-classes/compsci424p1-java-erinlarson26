@@ -24,10 +24,11 @@ public class Version1 {
  
     int create(int parentPid) {
     	int childPid = findFreePCB();
+    	if(childPid != -1) {
        // pcbArray[childPid] = new Version1PCB();
     	pcbArray[childPid].parent = parentPid;
         pcbArray[parentPid].children.add(childPid);
-    	
+    	}
         return 0;
     }
 
@@ -59,7 +60,7 @@ public class Version1 {
     
     private int findFreePCB() {
         for (int i = 0; i < pcbArray.length; i++) {
-            if (pcbArray[i].parent == -1 ) { //== null
+            if (pcbArray[i].parent == -1 && pcbArray[i].children.isEmpty()) { //== null
                 return i;
             }
         }
