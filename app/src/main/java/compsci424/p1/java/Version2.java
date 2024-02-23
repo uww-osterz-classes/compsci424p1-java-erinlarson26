@@ -12,9 +12,9 @@ public class Version2 {
     	pcbArray = new Version2PCB[n];
     	pcbArray[0] = new Version2PCB();
     	
-   /* 	for(int i = 1; i < n; i++) {
-    		pcbArray[i] = null; //new Version2PCB();
-    	} */
+    	for(int i = 1; i < n; i++) {
+    		pcbArray[i] = new Version2PCB();
+    	} 
     } 
 
     int create(int parentPid) {
