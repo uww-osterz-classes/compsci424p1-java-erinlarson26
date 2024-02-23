@@ -87,11 +87,7 @@ public class Version2 {
 		   nextAvailableIndex++;
 		   return allocatedIndex;
 	   }
-	   else {
-		   int newSize = pcbArray.length * 2;
-		   pcbArray = Arrays.copyOf(pcbArray, newSize);
-		   return allocatePCB();
-	   }
+	   return 0;
    }
    
    private static void freePCB(int index) {
