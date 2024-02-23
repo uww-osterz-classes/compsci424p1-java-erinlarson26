@@ -9,8 +9,8 @@ public class Version2PCB {
     int youngerSibling;
     int olderSibling;
    
-   public Version2PCB() {
-	   this.parent = -1;
+   public Version2PCB(int parent) {
+	   this.parent = parent;
 	   this.firstChild = -1;
 	   this.youngerSibling = -1;
 	   this.olderSibling = -1;
