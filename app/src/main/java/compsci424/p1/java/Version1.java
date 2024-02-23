@@ -3,10 +3,12 @@
  */
 package compsci424.p1.java;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Version1 {
 	private static Version1PCB[] pcbArray;
+	private static int nextAvailableIndex;
     /**
      * Default constructor. Use this to allocate (if needed) and
      * initialize the PCB array, create the PCB for process 0, and do
@@ -15,8 +17,10 @@ public class Version1 {
     public Version1(int n) {
     	pcbArray = new Version1PCB[n];
     	for(int i = 0; i < n; i++) {
-    		pcbArray[i] = new Version1PCB(i == 0 ? -1 : -2);
+    		pcbArray[i] = new Version1PCB(-2);
     	}
+    	pcbArray[0].parent = -1;
+    	nextAvailableIndex = 1;
     }
  
     int create(int parentPid) {
@@ -57,16 +61,15 @@ public class Version1 {
     }
     
     private static int allocatePCB() {
-    	for(int i = 0; i < pcbArray.length; i++) {
-    		if(pcbArray[i].parent == -2) {
-    			pcbArray[i].parent = -1;
-    			return i;
-    		}
+    	if(nextAvailableIndex < pcbArray.length) {
+    		int allocatedIndex = nextAvailableIndex;
+    		nextAvailableIndex++;
+    		return allocatedIndex;
     	}
-    	throw new RuntimeException("No free PCB available.");
+    	return 0;
     }
     
     private static void freePCB(int index) {
-        pcbArray[index] = new Version1PCB(-1);
+        pcbArray[index] = new Version1PCB(-2);
     }
 }
