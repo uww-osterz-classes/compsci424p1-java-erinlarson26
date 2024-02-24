@@ -3,12 +3,10 @@
  */
 package compsci424.p1.java;
 
-import java.util.Arrays;
-import java.util.List;
 
 public class Version2 {
-	private static Version2PCB[] pcbArray;
-	private static int nextAvailableIndex;
+	private Version2PCB[] pcbArray;
+	private int nextAvailableIndex;
   
     public Version2(int n) {
     	pcbArray = new Version2PCB[n];
@@ -23,6 +21,7 @@ public class Version2 {
     	int q = allocatePCB();
     	pcbArray[q].parent = parentPid;
     	
+    	if(parentPid != -2) {
     	if(pcbArray[parentPid].firstChild == -1) {
     		pcbArray[parentPid].firstChild = q;
     	}
@@ -32,9 +31,11 @@ public class Version2 {
     			youngestChild = pcbArray[youngestChild].youngerSibling;
     		}
     		pcbArray[youngestChild].youngerSibling = q;
-    		//pcbArray[q] = new Version2PCB(-2);
     		pcbArray[q].olderSibling = youngestChild;
+    	
     	}
+    	}
+    	//pcbArray[q] = new Version2PCB(-2);
 
     	return 0; 
     }
@@ -84,7 +85,7 @@ public class Version2 {
 	    }
    }
    
-   private static int allocatePCB() {
+   private int allocatePCB() {
 	   if(nextAvailableIndex < pcbArray.length) {
 		   int allocatedIndex = nextAvailableIndex;
 		   nextAvailableIndex++;
@@ -93,7 +94,7 @@ public class Version2 {
 	   return 0;
    }
    
-   private static void freePCB(int index) {
+   private void freePCB(int index) {
        pcbArray[index] = new Version2PCB(-2);
    }
    

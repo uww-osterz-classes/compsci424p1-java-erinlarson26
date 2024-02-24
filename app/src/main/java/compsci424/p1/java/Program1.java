@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.util.Iterator;
+
 
 /**
  * Main class for this program. The required steps have been copied
@@ -45,6 +47,7 @@ public class Program1 {
     		commands.add(command);
     	}
     	
+    	
     	for (String cmd : commands) {
             String[] parts = cmd.split(" ");
             if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
@@ -62,13 +65,14 @@ public class Program1 {
         }
     	version1.showProcessInfo();
     	
-    	for (String cmd : commands) {
-            String[] parts = cmd.split(" ");
-            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
-                // Similar error handling for Version2
-                System.out.println("Invalid command format: " + cmd);
-                continue;
-            }
+    	Iterator<String> iterator = commands.iterator();
+    	while (iterator.hasNext()) {
+    	    String cmd = iterator.next();
+    	    String[] parts = cmd.split(" ");
+    	    if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
+    	        System.out.println("Invalid command format: " + cmd);
+    	        continue;
+    	    }
 
             if (parts[0].equals("create")) {
                 int parentPid = Integer.parseInt(parts[1]);

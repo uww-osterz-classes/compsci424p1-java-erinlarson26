@@ -7,8 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Version1 {
-	private static Version1PCB[] pcbArray;
-	private static int nextAvailableIndex;
+	private Version1PCB[] pcbArray;
+	private int nextAvailableIndex;
     /**
      * Default constructor. Use this to allocate (if needed) and
      * initialize the PCB array, create the PCB for process 0, and do
@@ -31,6 +31,10 @@ public class Version1 {
     }
 
     int destroy (int targetPid) {
+    	if (targetPid < 0 || targetPid >= pcbArray.length || pcbArray[targetPid].parent == -2) {
+            // Invalid targetPid or process already destroyed
+            return -1;
+        }
     	for(int child : pcbArray[targetPid].children) {
     		destroy(child);
     		freePCB(child);
@@ -60,7 +64,7 @@ public class Version1 {
         }
     }
     
-    private static int allocatePCB() {
+    private int allocatePCB() {
     	if(nextAvailableIndex < pcbArray.length) {
     		int allocatedIndex = nextAvailableIndex;
     		nextAvailableIndex++;
@@ -69,7 +73,7 @@ public class Version1 {
     	return 0;
     }
     
-    private static void freePCB(int index) {
+    private void freePCB(int index) {
         pcbArray[index] = new Version1PCB(-2);
     }
 }
