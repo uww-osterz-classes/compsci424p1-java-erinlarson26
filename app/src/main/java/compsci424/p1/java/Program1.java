@@ -65,15 +65,14 @@ public class Program1 {
         }
     	version1.showProcessInfo();
     	
-    	Iterator<String> iterator = commands.iterator();
-    	while (iterator.hasNext()) {
-    	    String cmd = iterator.next();
-    	    String[] parts = cmd.split(" ");
-    	    if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
-    	        System.out.println("Invalid command format: " + cmd);
-    	        continue;
-    	    }
-
+    	for (String cmd : commands) {
+            String[] parts = cmd.split(" ");
+            if (parts.length < 2 || (!parts[0].equals("create") && !parts[0].equals("destroy"))) {
+                // Similar error handling for Version2
+                System.out.println("Invalid command format: " + cmd);
+                continue;
+            }
+    	
             if (parts[0].equals("create")) {
                 int parentPid = Integer.parseInt(parts[1]);
                 version2.create(parentPid);
