@@ -35,9 +35,11 @@ public class Version1 {
             // Invalid targetPid or process already destroyed
             return -1;
         }
+    	if (pcbArray[targetPid].children != null) {
     	for(int child : pcbArray[targetPid].children) {
     		destroy(child);
     		freePCB(child);
+    	}
     	}
     	pcbArray[targetPid].children.clear();
     	freePCB(targetPid);

@@ -41,7 +41,10 @@ public class Version2 {
     }
 
     int destroy (int targetPid) {
-    	
+    	if (targetPid < 0 || targetPid >= pcbArray.length || pcbArray[targetPid].parent == -2) {
+            // Invalid targetPid or process already destroyed
+            return -1;
+        }
     	int parent = pcbArray[targetPid].parent;
     	int olderSibling = pcbArray[targetPid].olderSibling;
     	int youngerSibling = pcbArray[targetPid].youngerSibling;
